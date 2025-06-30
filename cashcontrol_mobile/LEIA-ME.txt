@@ -1,0 +1,10 @@
+
+INSTRUÇÕES PARA INSTALAR NO CELULAR:
+
+1. Instale o Kivy Launcher da Play Store
+2. Copie esta pasta 'cashcontrol_mobile' para:
+   /sdcard/kivy/cashcontrol/
+3. Abra o Kivy Launcher no celular
+4. Toque em 'cashcontrol'
+
+ATENÇÃO: Renomeie a pasta de 'cashcontrol_mobile' para 'cashcontrol'

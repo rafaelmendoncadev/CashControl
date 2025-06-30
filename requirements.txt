@@ -1,0 +1,5 @@
+# Dependências do CashControl
+kivy>=2.0.0
+matplotlib>=3.5.0
+kivymd>=1.0.0
+pillow>=8.0.0
