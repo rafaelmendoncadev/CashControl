@@ -269,7 +269,7 @@ class DashboardScreen(Screen):
     
     def refresh_data(self):
         """Atualiza os dados do dashboard"""
-        def update_ui():
+        def update_ui(dt=None):
             try:
                 # Obter dados do controlador
                 data = self.controller.get_dashboard_data()
@@ -286,8 +286,8 @@ class DashboardScreen(Screen):
             except Exception as e:
                 print(f"Erro ao atualizar dashboard: {e}")
         
-        # Executar em thread separada para não bloquear a UI
-        threading.Thread(target=update_ui, daemon=True).start()
+        # Executar na thread principal usando Clock
+        Clock.schedule_once(update_ui, 0.1)
     
     def update_summary_cards(self, summary):
         """Atualiza os cards de resumo"""

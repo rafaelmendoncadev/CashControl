@@ -84,15 +84,14 @@ class ModernColorPicker(BoxLayout):
     """Seletor de cores visual moderno"""
     
     def __init__(self, selected_color='#2196F3', callback=None, **kwargs):
+        # Adicionar atributo color ANTES do super().__init__
+        self.color = (1, 1, 1, 1)
         super().__init__(orientation='horizontal', **kwargs)
         self.selected_color = selected_color
         self.callback = callback
         self.size_hint_y = None
         self.height = dp(50)
         self.spacing = dp(5)
-        
-        # Adicionar atributo color para evitar conflitos
-        self.color = (1, 1, 1, 1)
         
         self.colors = [
             '#2196F3', '#4CAF50', '#FF5722', '#FF9800',
