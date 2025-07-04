@@ -173,7 +173,8 @@ class FinanceController:
             # Verificar se já existe uma categoria com esse nome
             existing_categories = self.get_categories()
             for category in existing_categories:
-                if category['name'].lower() == name.lower():
+                existing_name = category.get('name', '')
+                if existing_name and existing_name.lower() == name.lower():
                     return {
                         'success': False, 
                         'message': f'Já existe uma categoria chamada "{name}". Escolha outro nome.'
@@ -194,6 +195,56 @@ class FinanceController:
                     'message': f'Já existe uma categoria com o nome "{name}". Escolha outro nome.'
                 }
             return {'success': False, 'message': f'Erro ao criar categoria: {error_msg}'}
+    
+    def update_category(self, category_id, name, icon='folder', color='#2196F3'):
+        """
+        Atualiza uma categoria existente
+        
+        Args:
+            category_id (int): ID da categoria
+            name (str): Nome da categoria
+            icon (str): Ícone
+            color (str): Cor
+        
+        Returns:
+            dict: Resultado da operação
+        """
+        try:
+            if not name or not name.strip():
+                return {'success': False, 'message': 'Nome da categoria é obrigatório'}
+            
+            name = name.strip()
+            
+            # Verificar se a categoria existe
+            category = Category.get_by_id(category_id)
+            if not category:
+                return {'success': False, 'message': 'Categoria não encontrada'}
+            
+            # Verificar se já existe outra categoria com esse nome (exceto a atual)
+            existing_categories = self.get_categories()
+            for existing_category in existing_categories:
+                existing_name = existing_category.get('name', '')
+                if (existing_category.get('id') != category_id and 
+                    existing_name and existing_name.lower() == name.lower()):
+                    return {
+                        'success': False, 
+                        'message': f'Já existe uma categoria chamada "{name}". Escolha outro nome.'
+                    }
+            
+            # Atualizar categoria
+            category.name = name
+            category.icon = icon
+            category.color = color
+            category.update()
+            
+            return {
+                'success': True, 
+                'message': 'Categoria atualizada com sucesso',
+                'category': category.to_dict()
+            }
+            
+        except Exception as e:
+            return {'success': False, 'message': f'Erro ao atualizar categoria: {str(e)}'}
     
     # DASHBOARD
     def get_dashboard_data(self):

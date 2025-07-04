@@ -331,6 +331,29 @@ class Category:
         return [cls(row[0], row[1], row[2], row[3]) for row in rows]
     
     @classmethod
+    def get_by_id(cls, category_id):
+        """
+        Busca uma categoria pelo ID
+        
+        Args:
+            category_id (int): ID da categoria
+        
+        Returns:
+            Category: Categoria encontrada ou None
+        """
+        db = Database()
+        conn = db.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT id, name, icon, color FROM categories WHERE id = ?', (category_id,))
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            return cls(row[0], row[1], row[2], row[3])
+        return None
+    
+    @classmethod
     def create(cls, name, icon='folder', color='#2196F3'):
         """
         Cria uma nova categoria
@@ -357,6 +380,20 @@ class Category:
         conn.close()
         
         return cls(category_id, name, icon, color)
+    
+    def update(self):
+        """Atualiza a categoria no banco de dados"""
+        conn = self.db.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            UPDATE categories 
+            SET name = ?, icon = ?, color = ?
+            WHERE id = ?
+        ''', (self.name, self.icon, self.color, self.id))
+        
+        conn.commit()
+        conn.close()
     
     def to_dict(self):
         """
